@@ -1,0 +1,62 @@
+package ru.forpda.example.an21utools.util;
+
+import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
+import ru.forpda.example.an21utools.App;
+
+import java.io.*;
+
+/**
+ * Created by max on 31.10.2014.
+ * всякие утилитки
+ */
+public class SysUtils {
+    /**
+     * Записать строку как файл
+     * @param fileContents строка содержимое
+     * @param fileName имя файла
+     */
+    public static void writeStringAsFile(final String fileContents, String fileName) {
+        Context context = App.instance.getApplicationContext();
+        try {
+            FileWriter out = new FileWriter(new File(context.getFilesDir(), fileName));
+            out.write(fileContents);
+            out.close();
+        } catch (IOException e) {
+            Log.e("Error", "Error", e);
+        }
+    }
+
+    /**
+     * Считать файл как строку
+     * @param fileName имя файла
+     * @return содержимое
+     */
+    public static String readFileAsString(String fileName) {
+        Context context = App.instance.getApplicationContext();
+        StringBuilder stringBuilder = new StringBuilder();
+        String line;
+        try {
+            BufferedReader in = new BufferedReader(new FileReader(new File(context.getFilesDir(), fileName)));
+            while ((line = in.readLine()) != null) stringBuilder.append(line);
+
+        } catch (FileNotFoundException e) {
+            Log.e("Error","Error", e);
+
+        } catch (IOException e) {
+            Log.e("Error","Error", e);
+        }
+        return stringBuilder.toString();
+    }
+
+    /**
+     * Запустить активити по имени пакета
+     * @param packageName
+     */
+    public static void runAndroidPackage(String packageName){
+        Intent LaunchIntent = App.instance.getPackageManager().getLaunchIntentForPackage(packageName);
+        App.instance.startActivity(LaunchIntent);
+    }
+
+}
