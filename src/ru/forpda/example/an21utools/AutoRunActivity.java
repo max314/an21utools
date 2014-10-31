@@ -13,6 +13,7 @@ import ru.forpda.example.an21utools.model.AppInfo;
 import ru.forpda.example.an21utools.model.AutoRunModel;
 import ru.forpda.example.an21utools.model.IndentActivityCodes;
 import ru.forpda.example.an21utools.model.ModelFactory;
+import ru.forpda.example.an21utools.util.SysUtils;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -62,6 +63,13 @@ public class AutoRunActivity extends Activity implements Observer {
         listviewAutoRun = (ListView) findViewById(R.id.listviewAutoRun);
         appInfoAdapter = new AppInfoAdapter();
         listviewAutoRun.setAdapter(appInfoAdapter);
+        listviewAutoRun.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String packageName = model.getAppInfoList().get(i).getName();
+                SysUtils.runAndroidPackage(packageName);
+            }
+        });
         readFromModel();
     }
 
