@@ -12,6 +12,7 @@ import java.io.*;
  * всякие утилитки
  */
 public class SysUtils {
+    private static LogHelper Log = new LogHelper(SysUtils.class);
     /**
      * Записать строку как файл
      * @param fileContents строка содержимое
@@ -24,7 +25,7 @@ public class SysUtils {
             out.write(fileContents);
             out.close();
         } catch (IOException e) {
-            Log.e("Error", "Error", e);
+            Log.e("Error write string as file", e);
         }
     }
 
@@ -41,11 +42,8 @@ public class SysUtils {
             BufferedReader in = new BufferedReader(new FileReader(new File(context.getFilesDir(), fileName)));
             while ((line = in.readLine()) != null) stringBuilder.append(line);
 
-        } catch (FileNotFoundException e) {
-            Log.e("Error","Error", e);
-
-        } catch (IOException e) {
-            Log.e("Error","Error", e);
+        } catch (Exception e) {
+            Log.e("Error read file as string", e);
         }
         return stringBuilder.toString();
     }

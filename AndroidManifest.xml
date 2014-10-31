@@ -15,5 +15,7 @@
         <activity android:name=".AutoRunActivity"/>
         <activity android:name=".AboutActivity"/>
         <activity android:name=".SelectApplicationActivity"/>
+        <service android:name=".BackgroudService"/>
+        <receiver android:name=".BROnBoot"/>
     </application>
 </manifest>
