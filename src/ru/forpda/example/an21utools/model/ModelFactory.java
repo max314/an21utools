@@ -6,6 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import ru.forpda.example.an21utools.App;
+import ru.forpda.example.an21utools.util.SysUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -58,7 +59,7 @@ public final class ModelFactory {
             }
             jsonObject.put("appinfo",jsonArray);
             String buffer = jsonObject.toString(4);
-            writeStringAsFile(buffer, AUTORUN_FILENAME);
+            SysUtils.writeStringAsFile(buffer, AUTORUN_FILENAME);
             Log.d("saveAutoRunModel",buffer);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -73,7 +74,7 @@ public final class ModelFactory {
     private static void loadAutoRunModel(){
         Log.d("loadAutoRunModel","start");
         try {
-            String buffer = readFileAsString(AUTORUN_FILENAME);
+            String buffer = SysUtils.readFileAsString(AUTORUN_FILENAME);
             JSONObject jsonObject = new JSONObject(buffer);
             AutoRunModel m = new AutoRunModel();
             m.setAppInfoList(new ArrayList<AppInfo>());
@@ -93,32 +94,4 @@ public final class ModelFactory {
     }
 
 
-    public static void writeStringAsFile(final String fileContents, String fileName) {
-        Context context = App.instance.getApplicationContext();
-        try {
-            FileWriter out = new FileWriter(new File(context.getFilesDir(), fileName));
-            out.write(fileContents);
-            out.close();
-        } catch (IOException e) {
-            Log.e("Error","Error", e);
-        }
-    }
-
-    public static String readFileAsString(String fileName) {
-        Context context = App.instance.getApplicationContext();
-        StringBuilder stringBuilder = new StringBuilder();
-        String line;
-        try {
-            BufferedReader in = new BufferedReader(new FileReader(new File(context.getFilesDir(), fileName)));
-            while ((line = in.readLine()) != null) stringBuilder.append(line);
-
-        } catch (FileNotFoundException e) {
-            Log.e("Error","Error", e);
-
-        } catch (IOException e) {
-            Log.e("Error","Error", e);
-        }
-
-        return stringBuilder.toString();
-    }
 }
