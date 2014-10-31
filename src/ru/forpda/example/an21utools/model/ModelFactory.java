@@ -15,26 +15,40 @@ import java.util.ArrayList;
  */
 public final class ModelFactory {
 
-    static final String AUTORUN_MODEL="AutoRun";
-    static AutoRunModel model;
+    private static final String AUTORUN_MODEL="AutoRun";
+    private static AutoRunModel model;
+    private static final String AUTORUN_FILENAME ="autorun.txt";
 
-    public static AutoRunModel getAutoRunModel(){
-
-        if (ModelFactory.model==null) {
+    // Прогрузим модельки если есть ))
+    static {
+        try {
+            loadAutoRunModel();
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Создаем пустую модель
             AutoRunModel model = new AutoRunModel();
+            model.setStarting(false); // не запускать
             model.setAppInfoList(new ArrayList<AppInfo>());
-            model.getAppInfoList().add(new AppInfo("com.android.browser"));
-            model.getAppInfoList().add(new AppInfo("com.anddroid.gallery"));
-            model.getAppInfoList().add(new AppInfo("com.aimp.player"));
             ModelFactory.model = model;
         }
+    }
+
+    /**
+     * @return AutoRun model for application
+     */
+    public static AutoRunModel getAutoRunModel(){
         return ModelFactory.model;
     }
 
-    public static void SaveAutoRunModel(){
+
+    /**
+     * Save model to file in json format
+     */
+    public static void saveAutoRunModel(){
+        Log.d("saveAutoRunModel","start");
         try {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put(AUTORUN_MODEL, AUTORUN_MODEL.toString());
+            jsonObject.put(AUTORUN_MODEL, AUTORUN_MODEL);
             jsonObject.put("starting", model.isStarting());
             JSONArray jsonArray = new JSONArray();
             for (int i = 0; i < model.getAppInfoList().size(); i++) {
@@ -44,10 +58,37 @@ public final class ModelFactory {
             }
             jsonObject.put("appinfo",jsonArray);
             String buffer = jsonObject.toString(4);
-            writeStringAsFile(buffer,"autorun.txt");
-            Log.d("SaveAutoRunModel",buffer);
+            writeStringAsFile(buffer, AUTORUN_FILENAME);
+            Log.d("saveAutoRunModel",buffer);
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * Load model from json format
+     * used internal
+     * may be raise exception
+     */
+    private static void loadAutoRunModel(){
+        Log.d("loadAutoRunModel","start");
+        try {
+            String buffer = readFileAsString(AUTORUN_FILENAME);
+            JSONObject jsonObject = new JSONObject(buffer);
+            AutoRunModel m = new AutoRunModel();
+            m.setAppInfoList(new ArrayList<AppInfo>());
+            m.getAppInfoList().clear();
+            m.setStarting(jsonObject.getBoolean("starting"));
+            JSONArray jsonArray = jsonObject.getJSONArray("appinfo");
+            for (int i = 0; i < jsonArray.length(); i++) {
+                m.addAppinfo(jsonArray.getJSONObject(i).getString("name"));
+            }
+            model=m;
+            Log.d("loadAutoRunModel","ok");
+        } catch (JSONException e) {
+            Log.e("loadAutoRunModel","Error",e);
+            e.printStackTrace();
+            throw new RuntimeException("Cannot load autorun model");
         }
     }
 
@@ -67,10 +108,8 @@ public final class ModelFactory {
         Context context = App.instance.getApplicationContext();
         StringBuilder stringBuilder = new StringBuilder();
         String line;
-        BufferedReader in = null;
-
         try {
-            in = new BufferedReader(new FileReader(new File(context.getFilesDir(), fileName)));
+            BufferedReader in = new BufferedReader(new FileReader(new File(context.getFilesDir(), fileName)));
             while ((line = in.readLine()) != null) stringBuilder.append(line);
 
         } catch (FileNotFoundException e) {

@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,7 +55,7 @@ public class AutoRunActivity extends Activity implements Observer {
             public void onClick(View view) {
                 Intent intent = new Intent(AutoRunActivity.this, SelectApplicationActivity.class);
                 startActivityForResult(intent, IndentActivityCodes.SELECT_APPLICATION_CODE);
-                ModelFactory.SaveAutoRunModel();
+
             }
         });
 
@@ -70,6 +69,13 @@ public class AutoRunActivity extends Activity implements Observer {
     protected void onDestroy() {
         super.onDestroy();
         model.deleteObserver(this);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        ModelFactory.saveAutoRunModel();
+
     }
 
     public void readFromModel() {
