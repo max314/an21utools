@@ -12,4 +12,9 @@
             android:text="Вобщ0ем тут еще много напишут"
             android:id="@+id/textView"
             android:layout_gravity="center"/>
+    <Button android:id="@+id/AboutTest"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Click me"
+            />
 </LinearLayout>

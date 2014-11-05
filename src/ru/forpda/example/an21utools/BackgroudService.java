@@ -1,6 +1,8 @@
 package ru.forpda.example.an21utools;
 
+import android.app.IntentService;
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -10,12 +12,19 @@ import ru.forpda.example.an21utools.util.LogHelper;
  * Created by max on 31.10.2014.
  * Воновый сервис предполагаеться что это он будеть запускать приложения
  */
-public class BackgroudService extends Service {
+public class BackgroudService extends IntentService  {
+
+    public BackgroudService() {
+        super("BackgroudService");
+    }
+
     private static LogHelper Log = new LogHelper(BackgroudService.class);
+    NotificationManager notificationManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Log.d("Create");
     }
 
@@ -33,16 +42,31 @@ public class BackgroudService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        int res = super.onStartCommand(intent, flags, startId);
-        Notification notification = new Notification(R.drawable.ic_launcher, "Text in status bar", System.currentTimeMillis());
-        startForeground(100,notification);
+
+        return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    protected void onHandleIntent(Intent intent) {
+        int notifyID = 1;
+
+        Notification notification = new Notification.Builder(this)
+                .setContentTitle("Автозапуск")
+                .setContentText("Эбу бу бу")
+                .setSmallIcon(android.R.drawable.sym_def_app_icon)
+                .setContentInfo("xvcbcvxbxcvbxcvb")
+                .setSubText("sub text")
+                .build();
+        notificationManager.notify(notifyID,notification);
+
+       startForeground(notifyID,notification);
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         stopForeground(true);
-        stopSelf(startId);
-        return res;
+        notificationManager.cancel(notifyID);
+
     }
 }
