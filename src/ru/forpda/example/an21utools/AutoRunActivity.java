@@ -5,9 +5,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.view.*;
 import android.widget.*;
 import ru.forpda.example.an21utools.model.AppInfo;
 import ru.forpda.example.an21utools.model.AutoRunModel;
@@ -28,6 +26,7 @@ public class AutoRunActivity extends Activity implements Observer {
         readFromModel();
     }
 
+    private final int CM_DELETE_ID = 1;
     private AutoRunModel model;
     private Switch switchAutoRun;
     private Button buAddAplication;
@@ -42,7 +41,7 @@ public class AutoRunActivity extends Activity implements Observer {
         model.addObserver(this);
 
         setContentView(R.layout.autorun);
-
+        // Чекалка запускаемся или нет
         switchAutoRun = (Switch) findViewById(R.id.switchAutoRun);
         switchAutoRun.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -50,6 +49,7 @@ public class AutoRunActivity extends Activity implements Observer {
                 model.setStarting(!model.isStarting());
             }
         });
+        // кнопарь добавления
         buAddAplication = (Button) findViewById(R.id.buttonTest);
         buAddAplication.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,18 +59,36 @@ public class AutoRunActivity extends Activity implements Observer {
 
             }
         });
-
+        // листвью
         listviewAutoRun = (ListView) findViewById(R.id.listviewAutoRun);
         appInfoAdapter = new AppInfoAdapter();
         listviewAutoRun.setAdapter(appInfoAdapter);
-        listviewAutoRun.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String packageName = model.getAppInfoList().get(i).getName();
-                SysUtils.runAndroidPackage(packageName);
-            }
-        });
+        registerForContextMenu(listviewAutoRun);
+//        listviewAutoRun.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                String packageName = model.getAppInfoList().get(i).getName();
+//                SysUtils.runAndroidPackage(packageName);
+//            }
+//        });
         readFromModel();
+    }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(0, CM_DELETE_ID, 0, "Удалить запись");
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        if (item.getItemId()==CM_DELETE_ID){
+            // Дряпнем элемент
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            int position = info.position;
+            model.removeAppinfo(position);
+        }
+        return super.onContextItemSelected(item);
     }
 
     @Override
@@ -83,7 +101,6 @@ public class AutoRunActivity extends Activity implements Observer {
     protected void onStop() {
         super.onStop();
         ModelFactory.saveAutoRunModel();
-
     }
 
     public void readFromModel() {

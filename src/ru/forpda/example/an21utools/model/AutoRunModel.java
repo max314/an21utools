@@ -43,4 +43,13 @@ public class AutoRunModel extends Observable {
         this.notifyObservers();
     }
 
+    /**
+     * Удалить приложение
+     * @param index
+     */
+    public void removeAppinfo(int index){
+        this.appInfoList.remove(index);
+        setChanged();
+        this.notifyObservers();
+    }
 }
