@@ -33,6 +33,11 @@ public class AutoRunActivity extends Activity implements Observer {
     private ListView listviewAutoRun;
     private AppInfoAdapter appInfoAdapter;
 
+    /**
+     * Флаг указывающий что модель считываеться и в этот момент ненадо обрабатывать листененры привет андройдику
+     */
+    private boolean insideReadFromModel = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +51,8 @@ public class AutoRunActivity extends Activity implements Observer {
         switchAutoRun.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                model.setStarting(!model.isStarting());
+                if (!insideReadFromModel)
+                    model.setStarting(!model.isStarting());
             }
         });
         // кнопарь добавления
@@ -82,7 +88,7 @@ public class AutoRunActivity extends Activity implements Observer {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        if (item.getItemId()==CM_DELETE_ID){
+        if (item.getItemId() == CM_DELETE_ID) {
             // Дряпнем элемент
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
             int position = info.position;
@@ -104,8 +110,13 @@ public class AutoRunActivity extends Activity implements Observer {
     }
 
     public void readFromModel() {
-        switchAutoRun.setChecked(model.isStarting());
-        appInfoAdapter.notifyDataSetChanged();
+        insideReadFromModel = true;
+        try {
+            switchAutoRun.setChecked(model.isStarting());
+            appInfoAdapter.notifyDataSetChanged();
+        } finally {
+            insideReadFromModel = false;
+        }
     }
 
     @Override

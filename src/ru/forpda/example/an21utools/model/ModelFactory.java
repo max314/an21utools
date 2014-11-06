@@ -51,6 +51,8 @@ public final class ModelFactory {
             JSONObject jsonObject = new JSONObject();
             jsonObject.put(AUTORUN_MODEL, AUTORUN_MODEL);
             jsonObject.put("starting", model.isStarting());
+            jsonObject.put("startdelay", model.getStartDelay());
+            jsonObject.put("applicationdelay", model.getApplicationDelay());
             JSONArray jsonArray = new JSONArray();
             for (int i = 0; i < model.getAppInfoList().size(); i++) {
                 JSONObject item = new JSONObject();
@@ -80,6 +82,8 @@ public final class ModelFactory {
             m.setAppInfoList(new ArrayList<AppInfo>());
             m.getAppInfoList().clear();
             m.setStarting(jsonObject.getBoolean("starting"));
+            m.setStartDelay(jsonObject.optInt("startdelay",5));
+            m.setApplicationDelay(jsonObject.optInt("applicationdelay",5));
             JSONArray jsonArray = jsonObject.getJSONArray("appinfo");
             for (int i = 0; i < jsonArray.length(); i++) {
                 m.addAppinfo(jsonArray.getJSONObject(i).getString("name"));

@@ -6,7 +6,12 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import ru.forpda.example.an21utools.model.AutoRunModel;
+import ru.forpda.example.an21utools.model.ModelFactory;
 import ru.forpda.example.an21utools.util.LogHelper;
+import ru.forpda.example.an21utools.util.SysUtils;
+
+import java.util.Date;
 
 /**
  * Created by max on 31.10.2014.
@@ -49,24 +54,59 @@ public class BackgroudService extends IntentService  {
     @Override
     protected void onHandleIntent(Intent intent) {
         int notifyID = 1;
+        AutoRunModel model = ModelFactory.getAutoRunModel();
+        // ничего не делаем пока
+        if (!model.isStarting()){
+            Log.d("отключен автоматический запуск");
+            return;
+        }
+        if (model.getAppInfoList().size()==0){
+            Log.d("количество запускаемых приложений =0");
+            return;
+        }
 
-        Notification notification = new Notification.Builder(this)
-                .setContentTitle("Автозапуск")
-                .setContentText("Эбу бу бу")
-                .setSmallIcon(android.R.drawable.sym_def_app_icon)
-                .setContentInfo("xvcbcvxbxcvbxcvb")
-                .setSubText("sub text")
-                .build();
-        notificationManager.notify(notifyID,notification);
 
-       startForeground(notifyID,notification);
+
+        Notification.Builder builder = new Notification.Builder(this)
+                .setContentTitle("Автозапуск приложений")
+                .setContentText("Ожидание запуска")
+                .setSmallIcon(android.R.drawable.sym_def_app_icon);
+        Notification notification = null;
+
         try {
-            Thread.sleep(5000);
+            // Первоначальный останов задержка
+
+            notification = builder.build();
+            startForeground(notifyID, notification );
+            notificationManager.notify(notifyID,notification);
+            Thread.sleep(model.getStartDelay()*1000);
+            // пошли по приложениям
+
+            for (int i=0;i<model.getAppInfoList().size();i++){
+                String pakageName =model.getAppInfoList().get(i).getName();
+                String info = String.format("Запускаем -> %s", pakageName);
+                Log.d(info);
+                builder.setContentText(info);
+                builder.setProgress(model.getAppInfoList().size(),i+1,false);
+                notification = builder.build();
+                notificationManager.notify(notifyID,notification);
+                startForeground(notifyID, notification );
+                try {
+                    SysUtils.runAndroidPackage(pakageName);
+                    Thread.sleep(model.getApplicationDelay()*1000);
+                } catch (Exception e) {
+                    Log.e("ошибка запуска",e);
+                }
+            }
+            builder.setContentText("Завершение");
+            builder.setProgress(0,0,false);
+            notification = builder.build();
+            notificationManager.notify(notifyID,notification);
+            Thread.sleep(2*1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         stopForeground(true);
         notificationManager.cancel(notifyID);
-
     }
 }

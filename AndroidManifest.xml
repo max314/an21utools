@@ -16,6 +16,11 @@
         <activity android:name=".AboutActivity"/>
         <activity android:name=".SelectApplicationActivity"/>
         <service android:name=".BackgroudService"/>
-        <receiver android:name=".BROnBoot"/>
+        <receiver android:name=".BROnBoot">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+            </intent-filter>
+        </receiver>
     </application>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 </manifest>
