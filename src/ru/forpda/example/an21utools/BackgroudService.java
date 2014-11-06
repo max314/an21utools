@@ -70,7 +70,7 @@ public class BackgroudService extends IntentService  {
         Notification.Builder builder = new Notification.Builder(this)
                 .setContentTitle("Автозапуск приложений")
                 .setContentText("Ожидание запуска")
-                .setSmallIcon(android.R.drawable.sym_def_app_icon);
+                .setSmallIcon(R.drawable.ic_launcher);
         Notification notification = null;
 
         try {
