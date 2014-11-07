@@ -33,15 +33,14 @@ public class SelectApplicationActivity extends Activity {
         listView = (ListView) findViewById(R.id.select_application_view);
         listView.setAdapter(new AppsAdapter());
         listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 ResolveInfo info = mApps.get(i);
                 Intent intent = new Intent();
-                intent.putExtra(IndentActivityCodes.SELECT_APPLICATION_KEY,info.activityInfo.packageName);
-                setResult(RESULT_OK,intent);
+                intent.putExtra(IndentActivityCodes.SELECT_APPLICATION_KEY, info.activityInfo.packageName);
+                setResult(RESULT_OK, intent);
                 finish();
-                return true;
             }
         });
     }

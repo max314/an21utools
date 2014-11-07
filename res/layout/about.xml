@@ -15,6 +15,6 @@
     <Button android:id="@+id/AboutTest"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Тестовый запуск прилоюжений"
+            android:text="Тестовый запуск приложений"
             />
 </LinearLayout>
