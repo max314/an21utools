@@ -6,15 +6,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import ru.forpda.example.an21utools.App;
+import ru.forpda.example.an21utools.util.LogHelper;
 import ru.forpda.example.an21utools.util.SysUtils;
 
 import java.io.*;
 import java.util.ArrayList;
 
 /**
+ * Фабрика модели приложения
  * Created by max on 29.10.2014.
  */
 public final class ModelFactory {
+
+    private static LogHelper Log = new LogHelper(ModelFactory.class);
 
     private static final String AUTORUN_MODEL="AutoRun";
     private static AutoRunModel model;
@@ -24,13 +28,15 @@ public final class ModelFactory {
     static {
         try {
             loadAutoRunModel();
+            Log.d("Load model on create app");
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("Load on Create model error",e);
             // Создаем пустую модель
             AutoRunModel model = new AutoRunModel();
             model.setStarting(false); // не запускать
             model.setAppInfoList(new ArrayList<AppInfo>());
             ModelFactory.model = model;
+            Log.d("Create default model on create app");
         }
     }
 
@@ -46,10 +52,9 @@ public final class ModelFactory {
      * Save model to file in json format
      */
     public static void saveAutoRunModel(){
-        Log.d("saveAutoRunModel","start");
+        Log.d("saveAutoRunModel enter");
         try {
             JSONObject jsonObject = new JSONObject();
-            jsonObject.put(AUTORUN_MODEL, AUTORUN_MODEL);
             jsonObject.put("starting", model.isStarting());
             jsonObject.put("startdelay", model.getStartDelay());
             jsonObject.put("applicationdelay", model.getApplicationDelay());
@@ -62,10 +67,12 @@ public final class ModelFactory {
             jsonObject.put("appinfo",jsonArray);
             String buffer = jsonObject.toString(4);
             SysUtils.writeStringAsFile(buffer, AUTORUN_FILENAME);
-            Log.d("saveAutoRunModel",buffer);
+            Log.d("model = \n"+buffer);
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e("Error saveAutoRunModel",e);
+            throw new RuntimeException("Cannot save model");
         }
+        Log.d("saveAutoRunModel leave");
     }
 
     /**
@@ -74,7 +81,7 @@ public final class ModelFactory {
      * may be raise exception
      */
     private static void loadAutoRunModel(){
-        Log.d("loadAutoRunModel","start");
+        Log.d("loadAutoRunModel enter");
         try {
             String buffer = SysUtils.readFileAsString(AUTORUN_FILENAME);
             JSONObject jsonObject = new JSONObject(buffer);
@@ -89,12 +96,11 @@ public final class ModelFactory {
                 m.addAppinfo(jsonArray.getJSONObject(i).getString("name"));
             }
             model=m;
-            Log.d("loadAutoRunModel","ok");
         } catch (JSONException e) {
-            Log.e("loadAutoRunModel","Error",e);
-            e.printStackTrace();
-            throw new RuntimeException("Cannot load autorun model");
+            Log.e("Error load model",e);
+            throw new RuntimeException("Cannot load model");
         }
+        Log.d("loadAutoRunModel leave");
     }
 
 

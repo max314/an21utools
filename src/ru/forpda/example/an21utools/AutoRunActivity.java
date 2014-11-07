@@ -11,20 +11,19 @@ import ru.forpda.example.an21utools.model.AppInfo;
 import ru.forpda.example.an21utools.model.AutoRunModel;
 import ru.forpda.example.an21utools.model.IndentActivityCodes;
 import ru.forpda.example.an21utools.model.ModelFactory;
+import ru.forpda.example.an21utools.util.LogHelper;
 import ru.forpda.example.an21utools.util.SysUtils;
 
 import java.util.Observable;
 import java.util.Observer;
 
 /**
+ * Активити для запускаемых приложений
  * Created by max on 28.10.2014.
  */
 public class AutoRunActivity extends Activity implements Observer {
 
-    @Override
-    public void update(Observable observable, Object o) {
-        readFromModel();
-    }
+    private static LogHelper Log = new LogHelper(AutoRunActivity.class);
 
     private final int CM_DELETE_ID = 1;
     private AutoRunModel model;
@@ -40,6 +39,7 @@ public class AutoRunActivity extends Activity implements Observer {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        Log.d("onCreate enter");
         super.onCreate(savedInstanceState);
 
         model = ModelFactory.getAutoRunModel();
@@ -77,6 +77,12 @@ public class AutoRunActivity extends Activity implements Observer {
 //                SysUtils.runAndroidPackage(packageName);
 //            }
 //        });
+        readFromModel();
+        Log.d("onCreate leave");
+    }
+
+    @Override
+    public void update(Observable observable, Object o) {
         readFromModel();
     }
 
@@ -127,7 +133,6 @@ public class AutoRunActivity extends Activity implements Observer {
             if (!str.isEmpty()) {
                 Toast.makeText(this, "You selected: " + str, Toast.LENGTH_SHORT).show();
                 model.addAppinfo(str);
-
             }
         }
     }
@@ -155,6 +160,7 @@ public class AutoRunActivity extends Activity implements Observer {
 //                ((TextView)item.findViewById(R.id.appVersion)).setText(info.serviceInfo.applicationInfo.loadDescription(getPackageManager()));
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
+                Log.e("Error in display package",e);
                 ((TextView) item.findViewById(R.id.appName)).setText("Package " + appInfo.getName() + " not found!!!!");
             }
             return item;
