@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.*;
 import android.widget.*;
 import ru.forpda.example.an21utools.model.AppInfo;
@@ -21,7 +22,7 @@ import java.util.Observer;
  * Активити для запускаемых приложений
  * Created by max on 28.10.2014.
  */
-public class AutoRunActivity extends Activity implements Observer {
+public class AutoRunActivity extends FragmentActivity implements Observer {
 
     private static LogHelper Log = new LogHelper(AutoRunActivity.class);
 

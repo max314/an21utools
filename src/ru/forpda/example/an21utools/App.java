@@ -13,6 +13,13 @@ public class App extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread thread, Throwable ex) {
+                Log.e("Unhandled ", ex);
+            }
+        });
+
         instance = this;
         Log.d("Application start");
     }
