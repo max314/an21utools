@@ -1,6 +1,7 @@
 package ru.forpda.example.an21utools;
 
 import android.app.Application;
+import com.stericson.RootTools.RootTools;
 import ru.forpda.example.an21utools.util.LogHelper;
 
 /**
@@ -22,6 +23,7 @@ public class App extends Application {
             }
         });
 
+        RootTools.debugMode = true;
         Log.d("Application start");
     }
 }
