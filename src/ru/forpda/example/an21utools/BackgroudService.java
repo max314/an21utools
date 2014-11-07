@@ -103,6 +103,14 @@ public class BackgroudService extends IntentService  {
             notification = builder.build();
             notificationManager.notify(notifyID,notification);
             Thread.sleep(2*1000);
+
+            if (model.isShitchToHomeScreen()){
+                Intent startMain = new Intent(Intent.ACTION_MAIN);
+                startMain.addCategory(Intent.CATEGORY_HOME);
+                startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(startMain);
+            }
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

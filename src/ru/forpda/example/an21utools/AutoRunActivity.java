@@ -26,8 +26,11 @@ public class AutoRunActivity extends Activity implements Observer {
     private static LogHelper Log = new LogHelper(AutoRunActivity.class);
 
     private final int CM_DELETE_ID = 1;
+    private final int CM_UP_ID = 2;
+    private final int CM_DOWN_ID = 3;
     private AutoRunModel model;
     private Switch switchAutoRun;
+    private Switch switchToHomeScreen;
     private Button buAddAplication;
     private ListView listviewAutoRun;
     private AppInfoAdapter appInfoAdapter;
@@ -55,6 +58,14 @@ public class AutoRunActivity extends Activity implements Observer {
                     model.setStarting(!model.isStarting());
             }
         });
+        switchToHomeScreen = (Switch) findViewById(R.id.switchToHomeScreen);
+        switchToHomeScreen.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (!insideReadFromModel)
+                    model.setShitchToHomeScreen(!model.isShitchToHomeScreen());
+            }
+        });
         // кнопарь добавления
         buAddAplication = (Button) findViewById(R.id.buttonTest);
         buAddAplication.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +73,6 @@ public class AutoRunActivity extends Activity implements Observer {
             public void onClick(View view) {
                 Intent intent = new Intent(AutoRunActivity.this, SelectApplicationActivity.class);
                 startActivityForResult(intent, IndentActivityCodes.SELECT_APPLICATION_CODE);
-
             }
         });
         // листвью
@@ -89,7 +99,12 @@ public class AutoRunActivity extends Activity implements Observer {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
         menu.add(0, CM_DELETE_ID, 0, "Удалить запись");
+        if (info.position!=0)
+            menu.add(0, CM_UP_ID, 0, "Вверх по списку");
+        if (info.position!=model.getAppInfoList().size()-1)
+            menu.add(0, CM_DOWN_ID, 0, "Вниз по списку");
     }
 
     @Override
@@ -97,8 +112,15 @@ public class AutoRunActivity extends Activity implements Observer {
         if (item.getItemId() == CM_DELETE_ID) {
             // Дряпнем элемент
             AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
-            int position = info.position;
-            model.removeAppinfo(position);
+            model.removeAppinfo(info.position);
+        }
+        if (item.getItemId() == CM_DOWN_ID) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            model.shiftDownAppinfo(info.position);
+        }
+        if (item.getItemId() == CM_UP_ID) {
+            AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+            model.shiftUpAppinfo(info.position);
         }
         return super.onContextItemSelected(item);
     }
@@ -119,6 +141,7 @@ public class AutoRunActivity extends Activity implements Observer {
         insideReadFromModel = true;
         try {
             switchAutoRun.setChecked(model.isStarting());
+            switchToHomeScreen.setChecked(model.isShitchToHomeScreen());
             appInfoAdapter.notifyDataSetChanged();
         } finally {
             insideReadFromModel = false;

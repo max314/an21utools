@@ -5,13 +5,26 @@
               android:layout_height="fill_parent"
               android:padding="4pt" android:orientation="vertical">
 
+    <LinearLayout
+                  android:layout_width="fill_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="horizontal">
+        <Switch
+                android:id="@+id/switchAutoRun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Автозапуск приложений"
+                />
+        <Switch
+                android:id="@+id/switchToHomeScreen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Перейти на домашний экран"
+                android:paddingLeft="10sp"
+                />
 
-    <Switch
-            android:id="@+id/switchAutoRun"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Автозапуск приложений"
-            />
+    </LinearLayout>
+
     <Button
             android:id="@+id/buttonTest"
             android:layout_width="fill_parent"

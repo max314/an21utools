@@ -18,7 +18,34 @@ public class AutoRunModel extends Observable {
      */
     private int applicationDelay = 3;
 
+    /*
+       Список приложений
+     */
     private List<AppInfo> appInfoList;
+
+    /*
+      Переключиться после последнего приложения на домашний экран
+     */
+    private boolean shitchToHomeScreen = false;
+
+
+    /**
+     * получение настроки
+     * Переключиться после последнего приложения на домашний экран
+     * @return
+     */
+    public boolean isShitchToHomeScreen() {
+        return shitchToHomeScreen;
+    }
+
+    /**
+     * установка настроки
+     * Переключиться после последнего приложения на домашний экран
+     * @param shitchToHomeScreen
+     */
+    public void setShitchToHomeScreen(boolean shitchToHomeScreen) {
+        this.shitchToHomeScreen = shitchToHomeScreen;
+    }
 
     /**
      * Запускать при старте
@@ -76,6 +103,40 @@ public class AutoRunModel extends Observable {
         this.appInfoList.remove(index);
         setChanged();
         this.notifyObservers();
+    }
+
+    /**
+     * Сдвинуть приложение вверх по спискау
+     * @param index
+     */
+    public void shiftUpAppinfo(int index){
+        if (index<=0)
+            return;
+        this.swapAppInfo(index-1,index);
+        setChanged();
+        this.notifyObservers();
+    }
+    /**
+     * Сдвинуть приложение вниз по списку
+     * @param index
+     */
+    public void shiftDownAppinfo(int index){
+        if (index>=getAppInfoList().size()-1)
+            return;
+        this.swapAppInfo(index, index + 1);
+        setChanged();
+        this.notifyObservers();
+    }
+
+    /**
+     * Поменять 2 элемента массива
+     * @param index1
+     * @param index2
+     */
+    private void swapAppInfo(int index1,int index2){
+        AppInfo buff = this.getAppInfoList().get(index1);
+        this.getAppInfoList().set(index1,this.getAppInfoList().get(index2));
+        this.getAppInfoList().set(index2,buff);
     }
 
     /**
