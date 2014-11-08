@@ -26,8 +26,9 @@ public class AboutActivity extends Activity {
         });
         TextView tv = (TextView) findViewById(R.id.textViewDebug);
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(String.format("Root доступен = %s \n", RootTools.isRootAvailable()));
-        stringBuilder.append(String.format("Busybox доступен = %s \n", RootTools.isBusyboxAvailable()));
+        stringBuilder.append(String.format("Версия приложения = %s \n", App.instance.getString(R.string.app_version)));
+//        stringBuilder.append(String.format("Root доступен = %s \n", RootTools.isRootAvailable()));
+//        stringBuilder.append(String.format("Busybox доступен = %s \n", RootTools.isBusyboxAvailable()));
         tv.setText(stringBuilder.toString());
 
     }
