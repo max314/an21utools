@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.*;
 import android.widget.*;
 import ru.forpda.example.an21utools.model.AppInfo;
@@ -12,7 +14,6 @@ import ru.forpda.example.an21utools.model.AutoRunModel;
 import ru.forpda.example.an21utools.model.IndentActivityCodes;
 import ru.forpda.example.an21utools.model.ModelFactory;
 import ru.forpda.example.an21utools.util.LogHelper;
-import ru.forpda.example.an21utools.util.SysUtils;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -33,6 +34,10 @@ public class AutoRunActivity extends Activity implements Observer {
     private Switch switchToHomeScreen;
     private Button buAddAplication;
     private ListView listviewAutoRun;
+    private EditText edStartupDelay;
+    private EditText edApplicationDelay;
+
+
     private AppInfoAdapter appInfoAdapter;
 
     /**
@@ -87,6 +92,24 @@ public class AutoRunActivity extends Activity implements Observer {
 //                SysUtils.runAndroidPackage(packageName);
 //            }
 //        });
+        edStartupDelay = (EditText) findViewById(R.id.edStartupDelay);
+        edStartupDelay.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b) {
+                    saveEdit();
+                }
+            }
+        });
+        edApplicationDelay = (EditText) findViewById(R.id.edApplicationDelay);
+        edApplicationDelay.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if (!b) {
+                    saveEdit();
+                }
+            }
+        });
         readFromModel();
         Log.d("onCreate leave");
     }
@@ -96,14 +119,30 @@ public class AutoRunActivity extends Activity implements Observer {
         readFromModel();
     }
 
+    private void saveEdit() {
+        try {
+            int value = Integer.parseInt(edStartupDelay.getText().toString());
+            model.setStartDelay(value);
+        } catch (NumberFormatException nfe) {
+            Log.d("Could not parse " + nfe);
+        }
+        try {
+            int value = Integer.parseInt(edApplicationDelay.getText().toString());
+            model.setApplicationDelay(value);
+        } catch (NumberFormatException nfe) {
+            Log.d("Could not parse " + nfe);
+        }
+        readFromModel();
+    }
+
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo)menuInfo;
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
         menu.add(0, CM_DELETE_ID, 0, "Удалить запись");
-        if (info.position!=0)
+        if (info.position != 0)
             menu.add(0, CM_UP_ID, 0, "Вверх по списку");
-        if (info.position!=model.getAppInfoList().size()-1)
+        if (info.position != model.getAppInfoList().size() - 1)
             menu.add(0, CM_DOWN_ID, 0, "Вниз по списку");
     }
 
@@ -143,6 +182,8 @@ public class AutoRunActivity extends Activity implements Observer {
             switchAutoRun.setChecked(model.isStarting());
             switchToHomeScreen.setChecked(model.isShitchToHomeScreen());
             appInfoAdapter.notifyDataSetChanged();
+            edApplicationDelay.setText(Integer.toString(model.getApplicationDelay()));
+            edStartupDelay.setText(Integer.toString(model.getStartDelay()));
         } finally {
             insideReadFromModel = false;
         }
@@ -183,7 +224,7 @@ public class AutoRunActivity extends Activity implements Observer {
 //                ((TextView)item.findViewById(R.id.appVersion)).setText(info.serviceInfo.applicationInfo.loadDescription(getPackageManager()));
             } catch (PackageManager.NameNotFoundException e) {
                 e.printStackTrace();
-                Log.e("Error in display package",e);
+                Log.e("Error in display package", e);
                 ((TextView) item.findViewById(R.id.appName)).setText("Package " + appInfo.getName() + " not found!!!!");
             }
             return item;
