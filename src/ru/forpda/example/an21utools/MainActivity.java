@@ -27,6 +27,11 @@ public class MainActivity extends TabActivity {
         tabSpec.setContent(new Intent(this, AutoRunActivity.class));
         tabHost.addTab(tabSpec);
 
+        tabSpec = tabHost.newTabSpec("musicsetup");
+        tabSpec.setIndicator("Музыка");
+        tabSpec.setContent(new Intent(this, MusicSetupActivity.class));
+        tabHost.addTab(tabSpec);
+
         tabSpec = tabHost.newTabSpec("about");
         tabSpec.setIndicator("О программе");
         tabSpec.setContent(new Intent(this, AboutActivity.class));

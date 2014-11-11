@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+        <Button android:id="@+id/play" android:text="play" android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
+        <Button android:id="@+id/pause" android:text="pause" android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
+        <Button android:id="@+id/playpause" android:text="playpause" android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
+        <Button android:id="@+id/next" android:text="next" android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
+        <Button android:id="@+id/prev" android:text="prev" android:layout_height="wrap_content"
+                android:layout_width="wrap_content"/>
+    </LinearLayout>
+    <Button
+            android:id="@+id/musicSetupTestButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Test"
+            />
+
+</LinearLayout>
