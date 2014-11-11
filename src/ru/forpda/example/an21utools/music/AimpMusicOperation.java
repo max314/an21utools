@@ -1,14 +1,22 @@
 package ru.forpda.example.an21utools.music;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.view.KeyEvent;
 import ru.forpda.example.an21utools.App;
+import ru.forpda.example.an21utools.util.DisplayToast;
 
 /**
  * Created by max on 11.11.2014.
  * имплементация для aim через сервис
  */
 public class AimpMusicOperation implements IMusicOpertion {
+    Handler handler;
+
+    public AimpMusicOperation() {
+        handler = new Handler();
+    }
+
     @Override
     public void play() {
         runOperaton("com.aimp.service.action.PLAY");
@@ -36,12 +44,18 @@ public class AimpMusicOperation implements IMusicOpertion {
     }
 
     private void runOperaton(String oper) {
+        sendToast(oper);
         Intent intent = new Intent();
         String packageName = "com.aimp.player";
         String className = "com.aimp.player.service.AIMPService";
         intent.setClassName(packageName, className);
         intent.setAction(oper);
         App.instance.startService(intent);
+    }
+
+    private void sendToast(String oper) {
+        oper = String.format("Вызван сервис aimp с прарметром (%s)",oper);
+        handler.post(new DisplayToast(App.instance, oper));
     }
 
 }

@@ -22,7 +22,7 @@ public class MusicSetupActivity extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        musicOpertion = new AimpMusicOperation();
+        musicOpertion = new UniversalMusicOperation();
         setContentView(R.layout.musicsetup);
         musicSetupTestButton = (Button) findViewById(R.id.musicSetupTestButton);
         musicSetupTestButton.setOnClickListener(new View.OnClickListener() {
