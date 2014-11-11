@@ -152,6 +152,8 @@ public class AutoRunModel extends Observable {
      * @param startDelay
      */
     public void setStartDelay(int startDelay) {
+        if (startDelay<99)
+            startDelay=100;
         this.startDelay = startDelay;
     }
 
@@ -168,6 +170,9 @@ public class AutoRunModel extends Observable {
      * @param applicationDelay
      */
     public void setApplicationDelay(int applicationDelay) {
+        if (applicationDelay<99){
+            applicationDelay=100;
+        }
         this.applicationDelay = applicationDelay;
     }
 }

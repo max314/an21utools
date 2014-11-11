@@ -79,7 +79,7 @@ public class BackgroudService extends IntentService  {
             notification = builder.build();
             startForeground(notifyID, notification );
             notificationManager.notify(notifyID,notification);
-            Thread.sleep(model.getStartDelay()*1000);
+            Thread.sleep(model.getStartDelay());
             // пошли по приложениям
 
             for (int i=0;i<model.getAppInfoList().size();i++){
@@ -93,7 +93,7 @@ public class BackgroudService extends IntentService  {
                 startForeground(notifyID, notification );
                 try {
                     SysUtils.runAndroidPackage(pakageName);
-                    Thread.sleep(model.getApplicationDelay()*1000);
+                    Thread.sleep(model.getApplicationDelay());
                 } catch (Exception e) {
                     Log.e("ошибка запуска",e);
                 }
@@ -102,7 +102,7 @@ public class BackgroudService extends IntentService  {
             builder.setProgress(0,0,false);
             notification = builder.build();
             notificationManager.notify(notifyID,notification);
-            Thread.sleep(2*1000);
+            Thread.sleep(100);
 
             if (model.isShitchToHomeScreen()){
                 Intent startMain = new Intent(Intent.ACTION_MAIN);
