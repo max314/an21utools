@@ -12,8 +12,11 @@ import ru.forpda.example.an21utools.util.DisplayToast;
  */
 public class AimpMusicOperation implements IMusicOpertion {
     Handler handler;
+    private boolean showToast = false;
 
-    public AimpMusicOperation() {
+    public AimpMusicOperation(boolean showToast)
+    {
+        this.showToast=showToast;
         handler = new Handler();
     }
 
@@ -54,6 +57,8 @@ public class AimpMusicOperation implements IMusicOpertion {
     }
 
     private void sendToast(String oper) {
+        if (!showToast)
+            return;
         oper = String.format("Вызван сервис aimp с прарметром (%s)",oper);
         handler.post(new DisplayToast(App.instance, oper));
     }

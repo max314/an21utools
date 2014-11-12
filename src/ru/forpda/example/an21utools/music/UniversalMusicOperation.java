@@ -12,8 +12,11 @@ import ru.forpda.example.an21utools.util.DisplayToast;
 public class UniversalMusicOperation implements IMusicOpertion {
 
     Handler handler;
+    private boolean showToast = false;
 
-    public UniversalMusicOperation() {
+
+    public UniversalMusicOperation(boolean showToast) {
+        this.showToast = showToast;
         handler = new Handler();
     }
 
@@ -45,15 +48,16 @@ public class UniversalMusicOperation implements IMusicOpertion {
     private void runOperaton(int oper) {
         sendToast(oper);
         Intent mbIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
-        //KeyEvent
-        KeyEvent keyEvent = new KeyEvent(KeyEvent.ACTION_DOWN, oper);
-        //mbIntent
-        mbIntent.putExtra(Intent.EXTRA_KEY_EVENT, keyEvent);
-        //China_MBReceiverEngland_MBReceiver
-        App.instance.sendBroadcast(mbIntent);
+        mbIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_DOWN, oper));
+        App.instance.sendOrderedBroadcast(mbIntent, null);
+        mbIntent = new Intent(Intent.ACTION_MEDIA_BUTTON);
+        mbIntent.putExtra(Intent.EXTRA_KEY_EVENT, new KeyEvent(KeyEvent.ACTION_UP, oper));
+        App.instance.sendOrderedBroadcast(mbIntent, null);
     }
 
     private void sendToast(int oper) {
+        if (!showToast)
+            return;
         String operStr = "operation not detected";
         switch (oper) {
             case KeyEvent.KEYCODE_MEDIA_PLAY:

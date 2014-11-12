@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Утилитко для ГУ an21u</string>
-    <string name="app_version">1.0.1</string>
+    <string name="app_version">1.0.3</string>
+    <string name="musicwidget_play_name">Кнопка:Play</string>
+    <string name="musicwidget_pause_name">Кнопка:Pause</string>
+    <string name="musicwidget_playpause_name">Кнопка:PlayPause</string>
+    <string name="musicwidget_next_name">Кнопка:Next</string>
+    <string name="musicwidget_prev_name">Кнопка:Prev</string>
 </resources>

@@ -3,32 +3,38 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:padding="4px">
+    <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Выберите обработчик для виджета"/>
+    <Spinner
+            android:id="@+id/musicsetupSpinner"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            >
+     </Spinner>
+    <Switch
+            android:id="@+id/switchmusicWidgetToast"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Показывать при нажатии виджета доп информацию"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            />
+
+    <TextView android:paddingTop="10px" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="Тест кнопок"/>
     <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
-        <Button android:id="@+id/play" android:text="play" android:layout_height="wrap_content"
-                android:layout_width="wrap_content"/>
-        <Button android:id="@+id/pause" android:text="pause" android:layout_height="wrap_content"
-                android:layout_width="wrap_content"/>
-        <Button android:id="@+id/playpause" android:text="playpause" android:layout_height="wrap_content"
-                android:layout_width="wrap_content"/>
-        <Button android:id="@+id/next" android:text="next" android:layout_height="wrap_content"
-                android:layout_width="wrap_content"/>
         <Button android:id="@+id/prev" android:text="prev" android:layout_height="wrap_content"
-                android:layout_width="wrap_content"/>
+                android:layout_width="wrap_content" android:drawableLeft="@drawable/media_skip_backward32"/>
+
+        <Button android:id="@+id/play" android:text="play" android:layout_height="wrap_content"
+                android:layout_width="wrap_content" android:drawableLeft="@drawable/media_playback_start32"/>
+        <Button android:id="@+id/pause" android:text="pause" android:layout_height="wrap_content"
+                android:layout_width="wrap_content" android:drawableLeft="@drawable/media_playback_pause32"/>
+        <Button android:id="@+id/playpause" android:text="playpause" android:layout_height="wrap_content"
+                android:layout_width="wrap_content" android:drawableLeft="@drawable/media_play_pause32"/>
+        <Button android:id="@+id/next" android:text="next" android:layout_height="wrap_content"
+                android:layout_width="wrap_content" android:drawableLeft="@drawable/media_skip_forward32"/>
     </LinearLayout>
-    <Button
-            android:id="@+id/musicSetupTestButton"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="Test"
-            />
-    <ImageView
-            android:layout_width="fill_parent"
-            android:layout_height="180px"
-            android:src="@drawable/ic_launcher"
-            />
 
 </LinearLayout>

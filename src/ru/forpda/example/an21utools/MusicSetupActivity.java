@@ -1,77 +1,83 @@
 package ru.forpda.example.an21utools;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import ru.forpda.example.an21utools.music.AimpMusicOperation;
-import ru.forpda.example.an21utools.music.IMusicOpertion;
+import android.widget.*;
+import ru.forpda.example.an21utools.model.AutoRunModel;
+import ru.forpda.example.an21utools.model.ModelFactory;
 import ru.forpda.example.an21utools.music.UniversalMusicOperation;
 import ru.forpda.example.an21utools.util.LogHelper;
 
-/**
+/** TODO прикрутить модель как следует
  * Created by max on 11.11.2014.
  */
 public class MusicSetupActivity extends Activity {
     private static LogHelper Log = new LogHelper(MainActivity.class);
-    Button musicSetupTestButton;
-    IMusicOpertion musicOpertion;
+    Spinner spinnerProvider;
+    Switch switchmusicWidgetToast;
+    AutoRunModel model;
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        musicOpertion = new UniversalMusicOperation();
+        model = ModelFactory.getAutoRunModel();
         setContentView(R.layout.musicsetup);
-        musicSetupTestButton = (Button) findViewById(R.id.musicSetupTestButton);
-        musicSetupTestButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                try {
-                    new UniversalMusicOperation().playPause();
-                    return;
-
-//                    Intent intent = new Intent();
-//                    String packageName = "com.aimp.player";
-//                    String className = "com.aimp.player.service.AIMPService";
-//                    intent.setClassName(packageName, className);
-//                    intent.setAction("com.aimp.service.action.PLAY_PAUSE");
-//                    startService(intent);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
 
         ((Button) findViewById(R.id.play)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                musicOpertion.play();
+               model.getMusicOperation().play();
             }
         });
         ((Button) findViewById(R.id.pause)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                musicOpertion.pause();
+                model.getMusicOperation().pause();
             }
         });
         ((Button) findViewById(R.id.playpause)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                musicOpertion.playPause();
+                model.getMusicOperation().playPause();
             }
         });
         ((Button) findViewById(R.id.prev)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                musicOpertion.prevTrack();
+                model.getMusicOperation().prevTrack();
             }
         });
         ((Button) findViewById(R.id.next)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                musicOpertion.nextTrack();
+                model.getMusicOperation().nextTrack();
+            }
+        });
+        spinnerProvider = (Spinner) findViewById(R.id.musicsetupSpinner);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, model.getMusicProviders());
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerProvider.setAdapter(adapter);
+        spinnerProvider.setSelection(model.getMusicProvederIndex());
+        spinnerProvider.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                model.setMusicProvederIndex(i);
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+        switchmusicWidgetToast = (Switch) findViewById(R.id.switchmusicWidgetToast);
+        switchmusicWidgetToast.setChecked(model.isMusicWidgetToast());
+        switchmusicWidgetToast.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                model.setMusicWidgetToast(b);
             }
         });
     }

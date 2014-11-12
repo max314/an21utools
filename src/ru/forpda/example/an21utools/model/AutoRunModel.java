@@ -1,5 +1,9 @@
 package ru.forpda.example.an21utools.model;
 
+import ru.forpda.example.an21utools.music.AimpMusicOperation;
+import ru.forpda.example.an21utools.music.IMusicOpertion;
+import ru.forpda.example.an21utools.music.UniversalMusicOperation;
+
 import java.util.List;
 import java.util.Observable;
 
@@ -7,6 +11,15 @@ import java.util.Observable;
  * Created by max on 28.10.2014.
  */
 public class AutoRunModel extends Observable {
+
+    /**
+     * Назваания адаптеров для виджета музыки
+     */
+    private String[] musicProviders = {
+            "Унверсальный (эмуляция гарнитуры)",
+            "AIMP (напрямую)"
+    };
+
     /// Стартовать при запуске
     private boolean starting;
     /*
@@ -27,6 +40,17 @@ public class AutoRunModel extends Observable {
       Переключиться после последнего приложения на домашний экран
      */
     private boolean shitchToHomeScreen = false;
+
+    /**
+     * индекс провайдера для музыки
+     */
+    private int musicProvederIndex = 0;
+
+    /*
+      Показывать отладочные сообщения на виджетах
+    */
+    private boolean musicWidgetToast = false;
+
 
 
     /**
@@ -155,6 +179,9 @@ public class AutoRunModel extends Observable {
         if (startDelay<99)
             startDelay=100;
         this.startDelay = startDelay;
+        setChanged();
+        this.notifyObservers();
+
     }
 
     /***
@@ -174,5 +201,68 @@ public class AutoRunModel extends Observable {
             applicationDelay=100;
         }
         this.applicationDelay = applicationDelay;
+        setChanged();
+        this.notifyObservers();
+    }
+
+    /**
+     * получить список описаний провайдеров для музыки
+     * @return
+     */
+    public String[] getMusicProviders() {
+        return musicProviders;
+    }
+
+
+    /**
+     * Получить индекс текущего провайдера
+     * @return
+     */
+    public int getMusicProvederIndex() {
+        return musicProvederIndex;
+    }
+
+    /**
+     * Установить индекс текущего провайдера
+     * @param musicProvederIndex
+     */
+    public void setMusicProvederIndex(int musicProvederIndex) {
+        if (musicProvederIndex<0 && musicProvederIndex>1){
+            return;
+        }
+        this.musicProvederIndex = musicProvederIndex;
+        setChanged();
+        this.notifyObservers();
+
+    }
+
+    /**
+     * получить Показывать отладочные сообщения на виджетах
+     * @return
+     */
+    public boolean isMusicWidgetToast() {
+        return musicWidgetToast;
+    }
+
+    /**
+     * установить Показывать отладочные сообщения на виджетах
+     * @param musicWidgetToast
+     */
+    public void setMusicWidgetToast(boolean musicWidgetToast) {
+        this.musicWidgetToast = musicWidgetToast;
+        setChanged();
+        this.notifyObservers();
+
+    }
+
+    /**
+     * Получить реализацию обработчик для музыки
+     * @return
+     */
+    public IMusicOpertion getMusicOperation(){
+        if (musicProvederIndex==0)
+            return new UniversalMusicOperation(isMusicWidgetToast());
+        else
+            return new AimpMusicOperation(isMusicWidgetToast());
     }
 }
