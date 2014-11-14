@@ -50,8 +50,6 @@ public class AutoRunActivity extends Activity implements Observer {
     public void onCreate(Bundle savedInstanceState) {
         Log.d("onCreate enter");
         super.onCreate(savedInstanceState);
-        short[] a= new short[] { 260, 262, 263, 266, 274, 513, 514, 515, 769, 770, 1281, -25088, -25071, -24816, -24805, -24804 };
-
 
         model = ModelFactory.getAutoRunModel();
         model.addObserver(this);

@@ -6,6 +6,9 @@ import android.util.Log;
 import ru.forpda.example.an21utools.App;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by max on 31.10.2014.
@@ -56,5 +59,23 @@ public class SysUtils {
         Intent LaunchIntent = App.instance.getPackageManager().getLaunchIntentForPackage(packageName);
         App.instance.startActivity(LaunchIntent);
     }
+
+    /**
+     * Получить список фалов в каталоге с заданным расширением
+     * @param path
+     * @param ext
+     * @return
+     */
+    public static List<File> getFilesByExtension(String path, final String ext){
+        File[] list =  new File(path).listFiles(new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                return file.getName().toLowerCase().endsWith(ext.toLowerCase()) && file.isFile();
+            }
+        });
+        return Arrays.asList(list);
+    }
+
+
 
 }
