@@ -2,6 +2,7 @@ package ru.forpda.example.an21utools.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.tw.john.TWUtil;
 import android.util.Log;
 import ru.forpda.example.an21utools.App;
 
@@ -16,6 +17,14 @@ import java.util.List;
  */
 public class SysUtils {
     private static LogHelper Log = new LogHelper(SysUtils.class);
+    /**
+     * Константы для выполнения в твутилитах что значат не известно
+     */
+    public static final int EXECUTE_COMMAND_AS_0 = 0;
+    public static final int EXECUTE_COMMAND_AS_1 = 1;
+    public static final int EXECUTE_COMMAND_AS_2 = 2;
+    public static final int EXECUTE_COMMAND_AS_3 = 3;
+    public static final int EXECUTE_COMMAND_TAG = 40730;
     /**
      * Записать строку как файл
      * @param fileContents строка содержимое
@@ -74,6 +83,26 @@ public class SysUtils {
             }
         });
         return Arrays.asList(list);
+    }
+
+    public static void executeCommand(String command,int asLevele){
+        Log.d(String.format("executeCommand: %s level %d", command, asLevele));
+        TWUtil twutil = new TWUtil();
+        Log.d("new twutil");
+        twutil.open(null);
+        Log.d("twutil open");
+        try {
+            twutil.write(EXECUTE_COMMAND_TAG,asLevele,0,command);
+        }
+        catch (Throwable  e){
+            Log.e("twutil error ",e);
+        }
+        finally {
+            twutil.close();
+            Log.d("twutil close");
+        }
+
+
     }
 
 

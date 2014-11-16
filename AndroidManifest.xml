@@ -54,7 +54,7 @@
         <receiver
                 android:name=".MusicWidgetNext"
                 android:icon="@drawable/media_skip_forward"
-                android:label="@string/musicwidget_playpause_name">
+                android:label="musicwidget_next_name">
             <intent-filter>
                 <action
                         android:name="android.appwidget.action.APPWIDGET_UPDATE">
