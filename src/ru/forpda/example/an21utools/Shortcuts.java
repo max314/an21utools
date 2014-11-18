@@ -1,17 +1,30 @@
 package ru.forpda.example.an21utools;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Adapter;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import com.android.internal.util.ArrayUtils;
+import ru.forpda.example.an21utools.model.ModelFactory;
+import ru.forpda.example.an21utools.model.ShortCutModel;
+import ru.forpda.example.an21utools.util.ICommand;
 
 /**
  * Created by max on 17.11.2014.
  */
 public class Shortcuts extends Activity {
+
+    ShortCutModel.ShortCutItem[] data;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        data = new ShortCutModel().getData();
 
         final Intent intent = getIntent();
         final String action = intent.getAction();
@@ -20,41 +33,38 @@ public class Shortcuts extends Activity {
         if (Intent.ACTION_CREATE_SHORTCUT.equals(action)) {
             setupShortcut();
         }
-        else {
-            processShortcut(intent);
-        }
-        finish();
-        return;
-
+        setResult(RESULT_CANCELED, intent);
 
     }
 
     private void processShortcut(Intent intent) {
-
     }
 
     private void setupShortcut() {
         setContentView(R.layout.shortcuts);
-        ShortCutItem[] data = new ShortCutItem[]{
-                new ShortCutItem("Предыдущий трек","ru.forpda.example.an21utools.prev",R.drawable.media_skip_backward),
-                new ShortCutItem("Играть","ru.forpda.example.an21utools.play",R.drawable.media_playback_start),
-                new ShortCutItem("Пауза","ru.forpda.example.an21utools.pause",R.drawable.media_playback_pause),
-                new ShortCutItem("Играть/Пауза","ru.forpda.example.an21utools.playpause",R.drawable.media_play_pause),
-                new ShortCutItem("Следующий трек","ru.forpda.example.an21utools.next",R.drawable.media_skip_forward),
-        };
+
+
         ListView listView = (ListView) findViewById(R.id.shortcutListView);
+        listView.setAdapter(new ArrayAdapter<ShortCutModel.ShortCutItem>(this, android.R.layout.simple_list_item_1, data));
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                ShortCutModel.ShortCutItem item = data[i];
 
-    }
+                final Intent shortcutIntent = new Intent(Shortcuts.this, ShortCutExecute.class);
+                shortcutIntent.setAction(item.getAction());
+                final Intent.ShortcutIconResource iconResource = Intent.ShortcutIconResource.fromContext(Shortcuts.this, item.getResourceId());
+                final Intent intent = new Intent();
+                intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+                intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, item.getName());
+                intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
+                intent.setAction(item.getAction());
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
 
-    private class ShortCutItem{
-        String Name;
-        String Action;
-        int ResourceId;
-
-        private ShortCutItem(String name, String action, int resourceId) {
-            Name = name;
-            Action = action;
-            ResourceId = resourceId;
-        }
     }
 }
+
+

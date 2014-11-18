@@ -20,23 +20,26 @@
         <service android:name=".BackgroudService"/>
         <!--Добавляем шоткаты-->
         <!-- создание -->
-        <activity-alias android:name=".CreateShortcuts"
-                        android:targetActivity=".Shortcuts"
-                        android:label="Создание shortcut">
-            <intent-filter>
-                <action android:name="android.intent.action.CREATE_SHORTCUT" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-
-        </activity-alias>
-
-        <activity android:name=".Shortcuts"
-                  android:label="Обработка shortcut">
+        <activity android:name=".ShortCutExecute"
+                  android:theme="@android:style/Theme.NoDisplay"
+                  android:label="Обработка shortcut"
+                >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".Shortcuts"
+                        android:label="Создание ссылок на управление проигрывателем"
+                >
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+        </activity>
+
 
 
         <receiver android:name=".BROnBoot">
