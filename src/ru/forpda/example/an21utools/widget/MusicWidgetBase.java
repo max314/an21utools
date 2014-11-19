@@ -1,4 +1,4 @@
-package ru.forpda.example.an21utools;
+package ru.forpda.example.an21utools.widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;

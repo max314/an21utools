@@ -48,7 +48,7 @@
             </intent-filter>
         </receiver>
         <receiver
-                android:name=".MusicWidgetPlay"
+                android:name=".widget.MusicWidgetPlay"
                 android:icon="@drawable/media_playback_start"
                 android:label="@string/musicwidget_play_name">
             <intent-filter>
@@ -62,7 +62,7 @@
             </meta-data>
         </receiver>
         <receiver
-                android:name=".MusicWidgetPause"
+                android:name=".widget.MusicWidgetPause"
                 android:icon="@drawable/media_playback_pause"
                 android:label="@string/musicwidget_pause_name">
             <intent-filter>
@@ -76,7 +76,7 @@
             </meta-data>
         </receiver>
         <receiver
-                android:name=".MusicWidgetNext"
+                android:name=".widget.MusicWidgetNext"
                 android:icon="@drawable/media_skip_forward"
                 android:label="musicwidget_next_name">
             <intent-filter>
@@ -90,7 +90,7 @@
             </meta-data>
         </receiver>
         <receiver
-                android:name=".MusicWidgetPlayPause"
+                android:name=".widget.MusicWidgetPlayPause"
                 android:icon="@drawable/media_play_pause"
                 android:label="@string/musicwidget_playpause_name">
             <intent-filter>
@@ -104,7 +104,7 @@
             </meta-data>
         </receiver>
         <receiver
-                android:name=".MusicWidgetPrev"
+                android:name=".widget.MusicWidgetPrev"
                 android:icon="@drawable/media_skip_backward"
                 android:label="@string/musicwidget_prev_name">
             <intent-filter>

@@ -1,19 +1,20 @@
-package ru.forpda.example.an21utools;
+package ru.forpda.example.an21utools.widget;
 
 import android.content.Context;
+import ru.forpda.example.an21utools.R;
 import ru.forpda.example.an21utools.model.ModelFactory;
 import ru.forpda.example.an21utools.util.LogHelper;
 
 /**
  * Created by max on 12.11.2014.
  */
-public class MusicWidgetNext extends MusicWidgetBase {
-    private static LogHelper Log = new LogHelper(MusicWidgetNext.class);
+public class MusicWidgetPlay extends MusicWidgetBase {
+    private static LogHelper Log = new LogHelper(MusicWidgetPlay.class);
 
 
     @Override
     protected int getWidgetId() {
-        return R.layout.widgetmusic_next;
+        return R.layout.widgetmusic_play;
     }
 
     @Override
@@ -23,7 +24,7 @@ public class MusicWidgetNext extends MusicWidgetBase {
 
     @Override
     protected void onClick(Context context) {
-        ModelFactory.getAutoRunModel().getMusicOperation().nextTrack();
+        ModelFactory.getAutoRunModel().getMusicOperation().play();
         Log.d("onClick");
     }
 

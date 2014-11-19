@@ -1,0 +1,45 @@
+
+
+Выполнение комманд от рута
+
+this.j.write(40730, 1, 0, "rm /system/app/" + paramString);
+
+
+Цвет подсветки
+        if(g.open(new short[] {272}) != 0)
+            finish();
+        g.start();
+        g.addHandler("ColorActivity", mHandler);
+        g.write(272, 0xff000000); -- белый????
+
+установка цвета
+    public void b(int i)
+    {
+        ColorActivity.b(f).write(272, 0xffffff & i);
+    }
+
+получение - мессаге
+    public void handleMessage(Message message)
+    {
+        try
+        {
+            byte abyte0[] = (byte[])(byte[])message.obj;
+            switch(message.what)
+            {
+            case 272:
+                int i = 0xff000000 | (0xff & abyte0[0]) << 16 | (0xff & abyte0[1]) << 8 | 0xff & abyte0[2];
+                ColorActivity.a(f).a(i);
+                return;
+            }
+        }
+        catch(Exception exception)
+        {
+            Log.e("ColorActivity", Log.getStackTraceString(exception));
+        }
+    }
+clean
+        g.removeHandler("ColorActivity");
+        g.stop();
+        g.close();
+
+

@@ -25,10 +25,12 @@ public class SysUtils {
     public static final int EXECUTE_COMMAND_AS_2 = 2;
     public static final int EXECUTE_COMMAND_AS_3 = 3;
     public static final int EXECUTE_COMMAND_TAG = 40730;
+
     /**
      * Записать строку как файл
+     *
      * @param fileContents строка содержимое
-     * @param fileName имя файла
+     * @param fileName     имя файла
      */
     public static void writeStringAsFile(final String fileContents, String fileName) {
         Context context = App.instance.getApplicationContext();
@@ -43,6 +45,7 @@ public class SysUtils {
 
     /**
      * Считать файл как строку
+     *
      * @param fileName имя файла
      * @return содержимое
      */
@@ -62,21 +65,23 @@ public class SysUtils {
 
     /**
      * Запустить активити по имени пакета
+     *
      * @param packageName
      */
-    public static void runAndroidPackage(String packageName){
+    public static void runAndroidPackage(String packageName) {
         Intent LaunchIntent = App.instance.getPackageManager().getLaunchIntentForPackage(packageName);
         App.instance.startActivity(LaunchIntent);
     }
 
     /**
      * Получить список фалов в каталоге с заданным расширением
+     *
      * @param path
      * @param ext
      * @return
      */
-    public static List<File> getFilesByExtension(String path, final String ext){
-        File[] list =  new File(path).listFiles(new FileFilter() {
+    public static List<File> getFilesByExtension(String path, final String ext) {
+        File[] list = new File(path).listFiles(new FileFilter() {
             @Override
             public boolean accept(File file) {
                 return file.getName().toLowerCase().endsWith(ext.toLowerCase()) && file.isFile();
@@ -85,26 +90,59 @@ public class SysUtils {
         return Arrays.asList(list);
     }
 
-    public static void executeCommand(String command,int asLevele){
+    /**
+     * Получить список файлов из заданого каталога и если в этом каталоге есть подкаталоги то из них,
+     * не рекурсивно а только первый уровень подчинения....
+     * @param path стартовый путь
+     * @param ext расширение
+     * @return
+     */
+    public static List<File> getFilesWithDirByExtension(String path, final String ext, boolean includeSubDir) {
+        ArrayList<File> lists  = new ArrayList<File>(); // result
+        ArrayList<File> dirs  = new ArrayList<File>(); // dirs
+        FileFilter fileFilter = new FileFilter() {
+            @Override
+            public boolean accept(File file) {
+                return file.getName().toLowerCase().endsWith(ext.toLowerCase()) && file.isFile();
+            }
+        };
+
+        for (File file : new File(path).listFiles()){
+            if (file.isDirectory())
+                dirs.add(file);
+            if (fileFilter.accept(file))
+                lists.add(file);
+        }
+        if (includeSubDir){
+            for (File file : dirs){
+                lists.addAll(getFilesWithDirByExtension(file.getAbsolutePath(),ext,false));
+            }
+        }
+        return lists;
+    }
+
+    /**
+     * Выполнить команду от имени рут
+     * @param command
+     * @param asLevele
+     */
+    public static void executeCommand(String command, int asLevele) {
         Log.d(String.format("executeCommand: %s level %d", command, asLevele));
         TWUtil twutil = new TWUtil();
         Log.d("new twutil");
         twutil.open(null);
         Log.d("twutil open");
         try {
-            twutil.write(EXECUTE_COMMAND_TAG,asLevele,0,command);
-        }
-        catch (Throwable  e){
-            Log.e("twutil error ",e);
-        }
-        finally {
+            twutil.write(EXECUTE_COMMAND_TAG, asLevele, 0, command);
+        } catch (Throwable e) {
+            Log.e("twutil error ", e);
+        } finally {
             twutil.close();
             Log.d("twutil close");
         }
 
 
     }
-
 
 
 }
