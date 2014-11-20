@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="ru.forpda.example.an21utools"
-          android:versionCode="3"
+          android:versionCode="4"
           android:versionName="@string/app_version">
     <uses-sdk android:minSdkVersion="16" android:targetSdkVersion="16"/>
     <application android:label="@string/app_name" android:icon="@drawable/ic_launcher" android:name=".App">
@@ -78,7 +78,7 @@
         <receiver
                 android:name=".widget.MusicWidgetNext"
                 android:icon="@drawable/media_skip_forward"
-                android:label="musicwidget_next_name">
+                android:label="@string/musicwidget_next_name">
             <intent-filter>
                 <action
                         android:name="android.appwidget.action.APPWIDGET_UPDATE">

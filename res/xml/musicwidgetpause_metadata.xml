@@ -1,6 +1,6 @@
 <appwidget-provider
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:initialLayout="@layout/widgetmusic_play"
+    android:initialLayout="@layout/widgetmusic_pause"
     android:minHeight="40dp"
     android:minWidth="40dp"
     android:updatePeriodMillis="0"

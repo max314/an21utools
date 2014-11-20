@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class BootAnimationActivity extends Activity {
     private static LogHelper Log = new LogHelper(BootAnimationActivity.class);
-    String[] paths = new String[]{"/system/etc/bootanimation", "mnt/store/usb1","mnt/store/usb2","mnt/store/usb-1","/extsd","/sdcard","mnt/store/usb-2","/mnt/shared/share/boot"};
+    String[] paths = new String[]{"/system/etc/bootanimation", "/extsd","/sdcard","/usb","/mnt/shared/share/boot"};
     List<BootFile> bootFileList = new ArrayList<BootFile>();
     ListView listView;
 
@@ -68,8 +68,9 @@ public class BootAnimationActivity extends Activity {
     private void loadData() {
         bootFileList.clear();
         bootFileList.add(new BootFile("По умолчанию",null));
+        bootFileList.addAll(getFilesFrom("mnt/storage/",true));
         for (String path:paths){
-            bootFileList.addAll(getFilesFrom(path));
+            bootFileList.addAll(getFilesFrom(path,false));
         }
         listView.setAdapter(new BootFilesAdapter());
     }
@@ -79,10 +80,10 @@ public class BootAnimationActivity extends Activity {
      * @param path
      * @return
      */
-    private ArrayList<BootFile> getFilesFrom(String path){
+    private ArrayList<BootFile> getFilesFrom(String path, boolean recursive){
         ArrayList<BootFile> results =  new ArrayList<BootFile>();
         try {
-            List<File> list = SysUtils.getFilesByExtension(path,".zip");
+            List<File> list = SysUtils.getFilesWithDirByExtension(path, ".zip", recursive);
             for(File file : list){
                 results.add(new BootFile(file.getName(),file.getPath()));
             }
